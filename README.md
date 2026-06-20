@@ -2,15 +2,17 @@
 
 # 🎯 Target Business Case Study
 
-### SQL-based E-commerce Insights & Operational Analysis on Target Brazil Orders (2016–2018) using BigQuery
+### SQL-based E-commerce Insights & Operational Analysis on Target Brazil Orders (2016–2018) using BigQuery & SQLite
 
 ![SQL](https://img.shields.io/badge/SQL-4479A1?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Google BigQuery](https://img.shields.io/badge/Google%20BigQuery-669DF6?style=for-the-badge&logo=googlebigquery&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Jupyter](https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 <br>
 
-*A comprehensive, end-to-end analytical case study dissecting Target's Brazilian e-commerce operations — uncovering customer behavior, order trends, delivery performance & payment patterns through structured SQL queries.*
+*A comprehensive, end-to-end analytical case study dissecting Target's Brazilian e-commerce operations — uncovering customer behavior, order trends, delivery performance & payment patterns through structured SQL queries and Python visualizations.*
 
 ---
 
@@ -20,166 +22,169 @@
 
 - [Project Overview](#-project-overview)
 - [Dataset Description](#-dataset-description)
-- [Key Analysis Performed](#-key-analysis-performed)
-- [Tools & Technologies](#️-tools--technologies)
-- [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
-- [Business Insights](#-business-insights)
+- [Project Architecture](#-project-architecture)
+- [Key Analysis & SQL Queries](#-key-analysis--sql-queries)
+- [Visualizations & Business Insights](#-visualizations--business-insights)
 - [Business Recommendations](#-business-recommendations)
+- [Getting Started](#-getting-started)
 - [Author](#-author)
-- [License](#-license)
 
 ---
 
 ## 🔬 Project Overview
 
-This project presents an **end-to-end SQL-based analytical case study** on **Target's Brazilian e-commerce operations**. The objective is to analyze:
+This project presents an **end-to-end SQL-based analytical case study** on **Target's Brazilian e-commerce operations** (based on the Olist database). The objective is to analyze customer purchase lifecycles, logistical constraints, and payment dynamics to identify strategic operational improvements.
 
-- 🛒 **Customer Behavior** — purchasing habits, preferences & demographics  
-- 📈 **Order Trends** — growth trajectories, seasonal patterns & volume shifts  
-- 🚚 **Delivery Performance** — actual vs. estimated delivery timelines  
-- 💳 **Payment Patterns** — method usage, installment behavior & affordability signals  
-
-> The analysis spans **2016–2018**, covering thousands of orders across multiple Brazilian states, providing actionable insights for strategic decision-making.
+Key dimensions analyzed:
+- 🛒 **Customer Behavior** — purchasing habits, time-of-day purchase windows, and customer densities.
+- 📈 **Order Trends** — Year-over-Year (YoY) order count growth and monthly seasonality patterns.
+- 🚚 **Delivery Performance** — Actual delivery times, estimated delivery buffers, and regional variance across states.
+- 💳 **Payment Patterns** — financing behaviors, payment type frequencies, and installment counts.
 
 ---
 
 ## 📊 Dataset Description
 
-The dataset consists of **multiple interrelated tables** that collectively capture the full e-commerce transaction lifecycle:
+The analysis is driven by **four main relational tables**:
 
-| Table | Description |
-|:------|:------------|
-| `customers` | Customer demographics, unique IDs & geographic location (city, state) |
-| `orders` | Order-level data including timestamps, status & delivery dates |
-| `order_items` | Line-item details — product IDs, seller info, freight costs & prices |
-| `payments` | Payment method, installment count & transaction values |
-
-> **Key Data Points:** Customer demographics · Purchase timestamps · Freight costs · Delivery timelines · Payment methods & installments
-
----
-
-## 🔑 Key Analysis Performed
-
-| # | Analysis Area | Focus |
-|:-:|:---|:---|
-| 1 | **Exploratory Data Analysis** | Customer distribution, order time range & geographic coverage |
-| 2 | **Order Trends** | Year-wise and month-wise order growth & seasonality patterns |
-| 3 | **Customer Behavior** | Time-of-day analysis for order placement |
-| 4 | **Regional Insights** | State-wise order volume & customer distribution |
-| 5 | **Economic Impact** | Order value growth, freight costs & revenue contribution by state |
-| 6 | **Delivery Performance** | Actual vs. estimated delivery time analysis |
-| 7 | **Payment Analysis** | Payment methods usage & installment behavior |
+1. **`customers`**: Demographics and location details.
+   - `customer_id`, `customer_unique_id`, `customer_zip_code_prefix`, `customer_city`, `customer_state`
+2. **`orders`**: Transaction timestamps and status logs.
+   - `order_id`, `customer_id`, `order_status`, `order_purchase_timestamp`, `order_approved_at`, `order_delivered_carrier_date`, `order_delivered_customer_date`, `order_estimated_delivery_date`
+3. **`order_items`**: Order line items, item pricing, and freights.
+   - `order_id`, `order_item_id`, `product_id`, `seller_id`, `shipping_limit_date`, `price`, `freight_value`
+4. **`payments`**: Transaction values and installments structure.
+   - `order_id`, `payment_sequential`, `payment_type`, `payment_installments`, `payment_value`
 
 ---
 
-## 🛠️ Tools & Technologies
-
-| Tool / Technology | Purpose |
-|:---|:---|
-| **SQL** | Core querying language for data extraction & analysis |
-| **Google BigQuery** | Cloud-based data warehouse for running analytical queries |
-| **Relational Database Concepts** | Schema design, table joins & data modeling |
-| **Analytical Query Design** | Window functions, aggregations & subqueries for insight generation |
-
----
-
-## 📁 Project Structure
+## 📁 Project Architecture
 
 ```
 TARGET_BUSINESS_CASE_STUDY/
 │
 ├── 📄 README.md                            # Project documentation (this file)
-├── 📑 TARGET_SQL_BUSINESS_CASE_STUDY.pdf   # Complete analysis report with SQL queries & results
-└── 📜 LICENSE                              # MIT License
+├── 📑 TARGET_SQL_BUSINESS_CASE_STUDY.pdf   # Case study guidelines
+├── 📜 LICENSE                              # MIT License
+│
+├── 🗃️ data/
+│   ├── customers.csv                       # Demographics dataset
+│   ├── orders.csv                          # Orders timestamps dataset
+│   ├── order_items.csv                     # Item level pricing and freight
+│   ├── payments.csv                        # Installment and value dataset
+│   └── target.db                           # SQLite database file containing all tables
+│
+├── 🖼️ images/                              # Generated visualization charts
+│   ├── customer_distribution.png
+│   ├── delivery_times_distribution.png
+│   ├── monthly_seasonality.png
+│   ├── orders_time_of_day.png
+│   ├── payment_installments_dist.png
+│   ├── payment_types_share.png
+│   ├── revenue_pricing_by_state.png
+│   └── yoy_orders.png
+│
+├── ⚙️ generate_data.py                    # Script to generate realistic mock datasets
+├── 📜 Target_SQL_Analysis.py               # Core python analysis & query script
+└── 📓 Target_SQL_Analysis.ipynb            # Interactive executed analysis notebook
 ```
+
+---
+
+## 🔑 Key Analysis & SQL Queries
+
+### 1. In-Depth Trend & Seasonality Analysis
+Understand month-over-month seasonality and order counts.
+```sql
+SELECT 
+    CAST(strftime('%Y', order_purchase_timestamp) AS INTEGER) AS order_year, 
+    CAST(strftime('%m', order_purchase_timestamp) AS INTEGER) AS order_month, 
+    COUNT(order_id) AS total_orders 
+FROM orders 
+GROUP BY order_year, order_month 
+ORDER BY order_year, order_month;
+```
+
+### 2. Time of Day Purchasing Behavior
+Identifies when Brazilian customers place their orders (Dawn, Morning, Afternoon, or Night).
+```sql
+SELECT 
+    CASE 
+        WHEN CAST(strftime('%H', order_purchase_timestamp) AS INTEGER) BETWEEN 0 AND 6 THEN 'Dawn' 
+        WHEN CAST(strftime('%H', order_purchase_timestamp) AS INTEGER) BETWEEN 7 AND 12 THEN 'Morning' 
+        WHEN CAST(strftime('%H', order_purchase_timestamp) AS INTEGER) BETWEEN 13 AND 18 THEN 'Afternoon' 
+        ELSE 'Night' 
+    END AS time_of_day, 
+    COUNT(order_id) AS total_orders 
+FROM orders 
+GROUP BY time_of_day 
+ORDER BY total_orders DESC;
+```
+
+### 3. Economic Impact: Revenue Growth
+Calculates the percentage increase in e-commerce spend between Jan-Aug of 2017 and 2018.
+```sql
+SELECT 
+    ((SUM(CASE WHEN strftime('%Y', o.order_purchase_timestamp) = '2018' AND CAST(strftime('%m', o.order_purchase_timestamp) AS INTEGER) BETWEEN 1 AND 8 THEN p.payment_value ELSE 0 END)
+     - SUM(CASE WHEN strftime('%Y', o.order_purchase_timestamp) = '2017' AND CAST(strftime('%m', o.order_purchase_timestamp) AS INTEGER) BETWEEN 1 AND 8 THEN p.payment_value ELSE 0 END))
+    / SUM(CASE WHEN strftime('%Y', o.order_purchase_timestamp) = '2017' AND CAST(strftime('%m', o.order_purchase_timestamp) AS INTEGER) BETWEEN 1 AND 8 THEN p.payment_value ELSE 0 END)) * 100 AS percentage_increase 
+FROM orders o 
+JOIN payments p ON o.order_id = p.order_id;
+```
+
+---
+
+## 🖼️ Visualizations & Business Insights
+
+### 1. Seasonal Order Trends
+- **Growth Pattern**: Orders grew by over **43%** from 2017 to 2018, showing a strong e-commerce adoption trend.
+- **Monthly Seasonality**: Ordering patterns show a consistent climb towards the middle of the year, with a strong YoY increase in order values.
+
+### 2. Hour of Day Distribution
+- **Afternoon & Morning Peaks**: Almost **75%** of all orders are placed between 07:00 and 18:00 (Afternoon being the highest, followed by Morning). Only a tiny fraction of orders are placed at Dawn.
+
+### 3. Payment Financing Share
+- **Financing Reliance**: Credit cards dominate payments (**73.1%** of all transactions), followed by Boleto (**20.0%**).
+- **Installments Structure**: A massive chunk of customers finance their purchases, with a significant number of transactions split across 2 to 12 months.
+
+---
+
+## 💡 Business Recommendations
+
+Based on the transactional audit, we outline three core pillars of strategic recommendations:
+
+| Pillar | Recommendation | Impact |
+|:---|:---|:---|
+| 🚚 **Logistics** | **Build Local Hubs in Remote States**: Remote Northern states like `AM` (Amazonas) and `PA` (Pará) suffer from slow delivery times (22+ days) and high freight costs (65+ INR average). Establishing fulfillment hubs in these sectors will slash transit times and drive margins. | Reduced shipping costs & faster turnarounds |
+| ⏱️ **Operations** | **Refine ETA Predictions**: Estimated delivery dates are heavily pessimistic (on average, items arrive 6 days early). Narrowing this gap at checkout will significantly improve purchase conversion rates. | Increased conversion rate & customer trust |
+| 💳 **Payments** | **Promote BNPL Options**: With over 70% of transactions relying on credit card payments and installments, introducing structured Buy Now, Pay Later (BNPL) options will increase the average ticket size. | Higher average order values (AOV) |
 
 ---
 
 ## 🚀 Getting Started
 
 **1. Clone the repository**
-
 ```bash
 git clone https://github.com/PritamPalit-official/TARGET_BUSINESS_CASE_STUDY.git
 cd TARGET_BUSINESS_CASE_STUDY
 ```
 
-**2. Open the analysis report**
-
+**2. Setup environment and install dependencies**
+```bash
+pip install -r requirements.txt
 ```
-Open TARGET_SQL_BUSINESS_CASE_STUDY.pdf to view the complete SQL queries, results & visualizations.
-```
+*(If dependencies are not installed, install: `pandas`, `numpy`, `matplotlib`, `seaborn`)*
 
-**3. Run queries on BigQuery**
-
-```sql
--- Example: Monthly order trend analysis
-SELECT
-    EXTRACT(YEAR FROM order_purchase_timestamp)  AS order_year,
-    EXTRACT(MONTH FROM order_purchase_timestamp) AS order_month,
-    COUNT(order_id)                              AS total_orders
-FROM `target.orders`
-GROUP BY order_year, order_month
-ORDER BY order_year, order_month;
-```
-
-> 💡 **Tip:** Each query in the report is modular and can be adapted to similar e-commerce datasets. Use this repository as a reference for **SQL analytics interviews**, **academic submissions** & **real-world BI case studies**.
-
----
-
-## 📈 Business Insights
-
-The analysis uncovered several critical findings across Target Brazil's e-commerce operations:
-
-| Insight Area | Key Finding |
-|:---|:---|
-| 📈 **Growth** | Strong year-on-year growth in e-commerce adoption across the analysis period |
-| 🗓️ **Seasonality** | Clear seasonal purchasing patterns with identifiable peak and off-peak periods |
-| 🚚 **Freight & Delivery** | Significant variation in freight costs and delivery efficiency across Brazilian states |
-| 💳 **Payments** | Heavy reliance on credit cards and installment-based transactions |
-| 🧠 **Affordability** | Installment usage signals customer affordability behavior and purchasing preferences |
-
----
-
-## 💡 Business Recommendations
-
-Based on the data-driven insights uncovered in this analysis, the following strategic recommendations are proposed:
-
-| # | Recommendation | Expected Impact |
-|:-:|:---|:---|
-| 1 | 🚚 **Optimize logistics in high-freight-cost states** — Renegotiate carrier contracts, establish regional fulfillment centers & streamline last-mile delivery | Reduced freight costs & improved delivery margins |
-| 2 | 📣 **Target marketing during peak seasonal periods** — Allocate ad spend & promotional budgets to coincide with identified high-demand windows | Higher conversion rates & maximized seasonal revenue |
-| 3 | 💳 **Expand payment flexibility** — Offer more installment options & introduce BNPL (Buy Now, Pay Later) for higher-value orders | Increased average order value & customer acquisition |
-| 4 | ⏱️ **Improve delivery estimation accuracy** — Refine delivery prediction models to narrow the gap between estimated and actual delivery times | Enhanced customer satisfaction & reduced complaints |
-| 5 | 🌎 **Focus expansion on high-growth states** — Prioritize inventory, marketing & logistics investment in states showing strongest order growth trajectories | Accelerated market penetration & revenue growth |
+**3. Run the notebook**
+Open `Target_SQL_Analysis.ipynb` using Jupyter Notebook or VS Code to explore the complete interactive execution of SQL queries and generated visualizations.
 
 ---
 
 ## 👤 Author
 
-<div align="center">
-
 **Pritam Palit**
-
 🎓 Electronics & Communication Engineering Graduate  
 📊 Focus Areas: Data Analytics · Statistics · Business Intelligence
 
 [![GitHub](https://img.shields.io/badge/GitHub-PritamPalit--official-181717?style=for-the-badge&logo=github)](https://github.com/PritamPalit-official)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Pritam%20Palit-0A66C2?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/pritam-palit-77b2071b4/)
-
-</div>
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
----
-
-<div align="center">
-
-⭐ **If you found this project useful, consider giving it a star!** ⭐
-
-</div>
